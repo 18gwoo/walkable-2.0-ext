@@ -1,16 +1,25 @@
 const express = require('express');
 const router = express.Router();
 
+const loginController = require('../controllers/loginController');
+const cookieController = require('../controllers/cookieController');
 
-const loginController = require('../controllers/loginController')
-const cookieController = require('../controllers/cookieController')
+router.post(
+  '/signup',
+  loginController.signUp,
+  cookieController.setCookie,
+  (req, res) => {
+    res.status(201).json({ data: res.locals.users });
+  }
+);
 
-router.post('/signup', loginController.signUp, (req, res) => {
-  res.sendStatus(201)
-})
+router.post(
+  '/login',
+  loginController.login,
+  cookieController.setCookie,
+  (req, res) => {
+    res.status(200).json({ data: res.locals.user });
+  }
+);
 
-router.post('/login', loginController.login, cookieController.setCookie, (req, res) => {
-  res.status(200).json(res.locals.userInfo)
-})
-
-module.exports = router
+module.exports = router;
