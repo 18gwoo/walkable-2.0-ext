@@ -45,7 +45,7 @@ loginController.signUp = async (req, res, next) => {
     };
     const response = await db.query(queryText);
     delete response.rows[0].password;
-    res.locals.users = response.rows[0];
+    res.locals.user = response.rows[0];
     next();
   } catch (error) {
     next({
@@ -80,7 +80,7 @@ loginController.login = async (req, res, next) => {
     }
     delete response.rows[0].password;
     console.log(response.rows[0]);
-    res.locals.userInfo = response.rows[0];
+    res.locals.user = response.rows[0];
     next();
   } catch (error) {
     next({

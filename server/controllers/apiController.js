@@ -39,29 +39,47 @@ apiController.getLocationResults = async (req, res, next) => {
     // define information to be used in fetch request
     const { addressLocation } = res.locals;
     const location = `${addressLocation[0]},${addressLocation[1]}`
-    const { keywordChoice,radius,type } = req.body;
+    const { radius, type } = req.body;
+    const keywordChoice = req.body.keywordChoice
+    let url;
+    console.log(keywordChoice)
+    if (keywordChoice) {
+      url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&keyword=${keywordChoice}&key=${key}`
+    } else {
+      url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&keyword=all&key=${key}`
+    }
+
+
     // const radius = 1100;
     // const type = 'restaurant';
 
     // fetch google-maps api data (only works on one line for some reason)
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&keyword=${keywordChoice}&key=${key}`
     const response = await fetch(url)
     // format response
     const data = await response.json();
     // console.log(data)
 
     const results = data.results;
-    console.log(results)
+    // console.log(results)
     // fill array with relevant info, distance lat,lng will be converted in following middleware
     const arrayOfPlaces = [];
-    console.log(results[1].photos)
+    // console.log(results[1].photos)
 
     //Need to put logic in here for whatever other information we want to put in ex: ratings, phone number, etc
-    results.forEach((el) => {
-      
+    for (const el of results) {
 
-      arrayOfPlaces.push({ name: el.name, address: el.vicinity, distance: `${el.geometry.location.lat},${el.geometry.location.lng}`, walkTime: undefined, walkTimeNum: undefined, rating: el.rating, favorited: false });
-    });
+      const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${el.place_id}&key=${key}&fields=formatted_address,url,website`
+
+      const detailsResponse = await fetch(detailsUrl)
+      const details = await detailsResponse.json()
+      const detailsResult = details.result
+      // console.log(el.photos[0].photo_reference)
+
+      const photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${el.photos[0].photo_reference}&key=${key}`
+      // console.log(photoUrl)
+      // console.log(el)
+      arrayOfPlaces.push({ name: el.name, address: el.vicinity, photo_url: `${photoUrl}`, opening_hours: `${el.opening_hours.open_now}`, google_url: `${detailsResult.url}`, website_url: `${detailsResult.website}`, distance: `${el.geometry.location.lat},${el.geometry.location.lng}`, walkTime: undefined, walkTimeNum: undefined, rating: el.rating, favorited: false });
+    }
 
 
     // add data to locals
@@ -149,6 +167,9 @@ apiController.getCurrentLocation = async (req, res, next) => {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+
+//https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJJ9T2xHr8MIgRwYFHq4ZxsIQ&key=AIzaSyBUCar8WeDpZDqcnt0BjnIMMMHIbJ5wn8E&fields=formatted_address,url,website
+
 
 //place details
 //https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJJ9T2xHr8MIgRwYFHq4ZxsIQ&key=AIzaSyBUCar8WeDpZDqcnt0BjnIMMMHIbJ5wn8E

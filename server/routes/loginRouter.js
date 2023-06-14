@@ -9,7 +9,7 @@ router.post(
   loginController.signUp,
   cookieController.setCookie,
   (req, res) => {
-    res.status(201).json({ data: res.locals.users });
+    res.send(201).json({ data: res.locals.user });
   }
 );
 

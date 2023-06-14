@@ -2,7 +2,6 @@ import * as actions from '../actions/actions';
 import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
-  id: 0,
   firstName: '',
   lastName: '',
   email: '',
@@ -14,18 +13,24 @@ const initialState = {
 
 const userReducer = createReducer(initialState, (builder) => {
   builder.addCase(actions.setUserActionCreator, (state, action) => {
+    // password,
+    // email,
+    // first_name,
+    // last_name,
+    // img_url,
+    // walking_distance,
+    // location,
+
     const {
-      id,
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
-      imgUrl,
-      radius,
+      img_url,
+      walking_distance,
       location,
       loginStatus,
     } = action.payload;
     return (state = {
-      id,
       firstName,
       lastName,
       email,
