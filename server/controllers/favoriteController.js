@@ -8,13 +8,13 @@ const moment = require('moment')
 
 favoriteController.addFavorite = async (req, res, next) => {
   try {
-    const { name,address,photo,url,phone_number,opening_hours,ratings,distance,types,walktime,walktime_num,deleted_at  } = req.body;
+    const { name,google_url,website_url, photo_url,address,phone_number,opening_hours,ratings,distance,types,walktime,walktime_num,deleted_at  } = req.body;
     const {user_id} = req.cookies
     const created_at = moment().format('YYYY-MM-DD')
-    const query = {text: `INSERT INTO Favorites (name,address,photo,url,phone_number,opening_hours,ratings,distance,types,walktime,walktime_num,created_at,deleted_at,user_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`, values: [name,address,photo,url,phone_number,opening_hours,ratings,distance,types,walktime,walktime_num,created_at,deleted_at,user_id]}
+    const query = {text: `INSERT INTO Favorites (name,address,photo_url,google_url,website_url,phone_number,opening_hours,ratings,distance,types,walktime,walktime_num,created_at,deleted_at,user_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`, values: [name,address,photo_url,google_url, website_url,phone_number,opening_hours,ratings,distance,types,walktime,walktime_num,created_at,deleted_at,user_id]}
     const response = await db.query(query);
-    console.log('Sucesfully Inserted!');
+    console.log('Successfully Inserted!');
    next();
   } catch (e) {
     next({
@@ -31,8 +31,12 @@ favoriteController.deleteFavorite = async (req, res, next) => {
     const { name} = req.body;
     const {user_id} = req.cookies
     const query = {text: `DELETE FROM Favorites WHERE name = $1 AND user_id = $2`, values: [name,user_id]};
-    const response = await db.query(query);
-    console.log('Deleted Sucesfully!')
+    const deleteResponse = await db.query(query);
+    console.log('Deleted Successfully!')
+    const getAllQuery = {text:`SELECT * FROM Favorites WHERE user_id = $1`,values: [user_id]};
+    const getAllresponse = await db.query(getAllQuery);
+    const arrOfObjs = getAllresponse.rows;
+    res.locals.data = arrOfObjs
     next()
   } catch (e) {
     next({
@@ -69,7 +73,7 @@ favoriteController.checkDatabase = async (req, res, next) => {
     const { rawData } = res.locals;
         for (let i = 0; i < rawData.length; i++) {
           const {name} = rawData[i]
-          console.log('name: ', name)
+          // console.log('name: ', name)
             const query = {
             text: `SELECT * FROM Favorites WHERE name = $1 AND user_id = $2`,
             values: [name, user_id],
@@ -77,7 +81,7 @@ favoriteController.checkDatabase = async (req, res, next) => {
             const response = await db.query(query);
             rawData[i].favorited = response.rows.length !== 0;
         };
-        console.log(rawData);
+        // console.log(rawData);
         next();
     }
     catch (e) {
