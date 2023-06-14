@@ -3,10 +3,10 @@ import React from 'react';
 // import ResultsPage from './ResultsPage'
 import { Route, Routes } from 'react-router';
 import Navbar from './components/NavBar';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Search from './pages/Search';
-import Dashboard from './pages/Dashboard';
+import Login from './pages/login';
+import Signup from './pages/signup';
+import Search from './pages/search';
+import Dashboard from './pages/dashboard';
 import './styles.css';
 
 export default function App() {
