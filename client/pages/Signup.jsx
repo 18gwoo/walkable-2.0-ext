@@ -77,11 +77,11 @@ export default function Signup() {
             })
           }
         }
-        const response = await fetch('/api/signup', settings);
-        if (response.status === 200) {
-          dispatch(setUserActionCreator(fakeUser));
-          navigate("/dashboard");
-        };
+        // res.status(201).json({data: res.locals.users})
+        const data = await fetch('/api/signup', settings);
+        const response = await data.json();
+        dispatch(setUserActionCreator(response.data));
+        navigate("/dashboard");
       }
     catch (e) {
       console.log(e.message);
