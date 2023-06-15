@@ -19,7 +19,7 @@ apiController.addressToLocation = async (req, res, next) => {
         key: key,
       }
     })
-    // console.log(`address to location response`, response.data.results[0].geometry.location)
+    console.log(`address to location response`, response.data.results[0].geometry.location)
     const { lat, lng } = response.data.results[0].geometry.location;
     res.locals.addressLocation = [lat, lng];
     next();
@@ -38,17 +38,20 @@ apiController.getLocationResults = async (req, res, next) => {
   try {
     // define information to be used in fetch request
     const { addressLocation } = res.locals;
+    // console.log('i am address location', addressLocation)
     const location = `${addressLocation[0]},${addressLocation[1]}`
     const { radius, type } = req.body;
+    // console.log('i am radius and type in getlocationresults',req.body)
     const keywordChoice = req.body.keywordChoice
+
     let url;
-    console.log(keywordChoice)
+    // console.log(keywordChoice)
     if (keywordChoice) {
       url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&keyword=${keywordChoice}&key=${key}`
     } else {
       url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&type=${type}&keyword=all&key=${key}`
     }
-
+// console.log(url)
 
     // const radius = 1100;
     // const type = 'restaurant';
@@ -67,21 +70,30 @@ apiController.getLocationResults = async (req, res, next) => {
 
     //Need to put logic in here for whatever other information we want to put in ex: ratings, phone number, etc
     for (const el of results) {
-
-      const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${el.place_id}&key=${key}&fields=formatted_address,url,website`
+      // console.log(el)
+      const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${el.place_id}&key=${key}&fields=formatted_address,url,website,formatted_phone_number`
 
       const detailsResponse = await fetch(detailsUrl)
       const details = await detailsResponse.json()
       const detailsResult = details.result
-      // console.log(el.photos[0].photo_reference)
+      // console.log(el.photos[0].photo_reference) // THIS IS THE PROBLEM :       ^ )))))))))))
+      
+      
+      let photoUrl = `https://imgflip.com/i/7na0pr`
+      if(el.photos!==undefined){
+        photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${el.photos[0].photo_reference}&key=${key}`
+      }
+      
+      let opening = false; 
+      if(el.opening_hours!==undefined){
+        opening = el.opening_hours.open_now;
+      }
 
-      const photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${el.photos[0].photo_reference}&key=${key}`
-      // console.log(photoUrl)
-      // console.log(el)
-      arrayOfPlaces.push({ name: el.name, address: el.vicinity, photo_url: `${photoUrl}`, opening_hours: `${el.opening_hours.open_now}`, google_url: `${detailsResult.url}`, website_url: `${detailsResult.website}`, distance: `${el.geometry.location.lat},${el.geometry.location.lng}`, walkTime: undefined, walkTimeNum: undefined, rating: el.rating, favorited: false });
+      
+      arrayOfPlaces.push({ name: el.name, address: el.vicinity, photo_url: `${photoUrl}`,google_url: `${detailsResult.url}`,opening_hours: `${opening}`, distance: `${el.geometry.location.lat},${el.geometry.location.lng}`, walktime: undefined, walktime_num: undefined, ratings: el.rating, favorited: false,website_url: `${detailsResult.website}`, type: `${type}`, phone_number: `${detailsResult.formatted_phone_number}`});
     }
 
-
+// console.log(arrayOfPlaces)
     // add data to locals
     res.locals.rawData = arrayOfPlaces;
     return next();
@@ -119,15 +131,15 @@ apiController.walkingDistance = async (req, res, next) => {
         }
       })
       const distance = response.data.routes[0].legs[0].distance.text;
-      const walkTime = response.data.routes[0].legs[0].duration.text;
+      const walktime = response.data.routes[0].legs[0].duration.text;
       const distanceResponse = `Distance: ${distance}`
-      const walkTimeResponse = `Walk-time: ${walkTime}`
+      const walktimeResponse = `Walk-time: ${walktime}`
       rawData[i].distance = distanceResponse;
-      rawData[i].walkTime = walkTimeResponse;
+      rawData[i].walktime = walktimeResponse;
 
-      const index = walkTime.indexOf(' ');
-      const walkTimeNum = walkTime.slice(0, index);
-      rawData[i].walkTimeNum = Number(walkTimeNum);
+      const index = walktime.indexOf(' ');
+      const walktime_num = walktime.slice(0, index);
+      rawData[i].walktime_num = Number(walktime_num);
       // console.log(rawData[i].walkTimeNum);
     }
     next();

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setFavoritesActionCreator } from '../actions/actions';
 
-export default function Result({ name, address, distance, walkTime, favorited }) {
+export default function Result(props) {
 
   const [isFavorited, setIsFavorited] = useState(false);
 
@@ -17,17 +17,12 @@ export default function Result({ name, address, distance, walkTime, favorited })
         headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
-            body: JSON.stringify({
-              name,
-              address,
-              distance,
-              walkTime,
-              favorited,
-            })
-          }
+          },
+          body: JSON.stringify(props)
         }
-      const data = fetch('/api/addFavorite', settings);
-      const response = await data.json().data; // new marketList 
+      const data = await fetch('/api/addFavorite', settings);
+      const response = await data.json(); // new marketList 
+      console.log(response);
       dispatch(setFavoritesActionCreator(response));
         setIsFavorited(true);
     }
@@ -44,17 +39,13 @@ export default function Result({ name, address, distance, walkTime, favorited })
         headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
-            body: JSON.stringify({
-              name,
-              address,
-              distance,
-              walkTime,
-              favorited,
-            })
-          }
+            
+          },
+        body: JSON.stringify(props)
         }
-      const data = fetch('/api/deleteFavorite', settings);
-      const response = await data.json().data;
+      const data = await fetch('/api/deleteFavorite', settings);
+      const response = await data.json();
+      console.log(response);
       dispatch(setFavoritesActionCreator(response));
       setIsFavorited(false);
     }
@@ -62,14 +53,15 @@ export default function Result({ name, address, distance, walkTime, favorited })
       console.log(e.message);
     }
   };
-
+  // name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num
   return (
     <div>Result
-        <button onClick={isFavorited ? handleAddFavorite : handleDeleteFavorite}>{isFavorited ? 'Added to Favorite' : 'Not Favorited'}</button>
-        {name}
-        {address}
-        {distance}
-        {walkTime}
+        <button onClick={isFavorited ? handleDeleteFavorite : handleAddFavorite}>{isFavorited ? 'UnFavorite' : 'Add to Favorite'}</button>
+        {props.name}
+        {props.address}
+        {props.phone_number}
+        {props.walktime}
+        {props.distance}
     </div>
   )
 }

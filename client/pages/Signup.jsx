@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setUserActionCreator } from '../actions/actions';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+import { Navigate } from "react-router-dom"
 
 export default function Signup() {
   const [firstName, setFirstName] = useState('');
@@ -12,6 +13,12 @@ export default function Signup() {
   const [distance, setDistance] = useState(3);
   const [password, setPassword] = useState('');
   const [location, setLocation] = useState('');
+
+  // check to see if cookie w/ user id exists
+    // if yes
+      // fetch user data using get user
+        // populate userstate using action and user reducer
+        // navigate to dashboard
 
   // handle signup inputs
   const handleFirstName = (e) => {
@@ -31,8 +38,8 @@ export default function Signup() {
   };
   
 
-  const handleSetDistance = (value) => {
-    setDistance(value);
+  const handleSetDistance = (e) => {
+    setDistance(e.target.value);
   };
 
   const handleLocation = (e) => {
@@ -45,18 +52,6 @@ export default function Signup() {
   // use navigate to change route on successful login
   let navigate = useNavigate();
 
-  // fake user data for testing reducer state
-  const fakeUser = {
-    id: 5,
-    firstName: 'Bryan',
-    lastName: 'Trang',
-    email: 'bryan@bryan.com',
-    imgUrl: '',
-    radius: 6,
-    location: 'Los Angeles, CA',
-    loginStatus: true,
-  }
-
    // post request for signup -> should update userState after 200 repsonse
   const handleSignUp = async (e) => {
     // use prevent default here because of form default reload
@@ -67,17 +62,16 @@ export default function Signup() {
         headers: {
            'Accept': 'application/json',
           'Content-Type': 'application/json',
+        },
             body: JSON.stringify({
-              firstName,
-              lastName,
+              first_name: firstName,
+              last_name: lastName,
               email,
-              radius: radius*1600, // converting miles to meters
+              walking_distance: distance*1600, // converting miles to meters
               password,
               location,
             })
-          }
         }
-        // res.status(201).json({data: res.locals.users})
         const data = await fetch('/api/signup', settings);
         const response = await data.json();
         dispatch(setUserActionCreator(response.data));
@@ -92,31 +86,32 @@ export default function Signup() {
   return (
     <div>
       Signup for Walkable
-      <form>
-        <input type='text' placeholder='First Name' onChange={handleFirstName}/>
+      <form onSubmit={handleSignUp}>
+        <input type='text' placeholder='First Name' onChange={handleFirstName} value={firstName}/>
         <br></br>
-        <input type='text' placeholder='Last Name' onChange={handleLastName}/>
+        <input type='text' placeholder='Last Name' onChange={handleLastName} value={lastName}/>
         <br></br>
-        <input type='text' placeholder='Email Address' onChange={handleEmail}/>
+        <input type='text' placeholder='Email Address' onChange={handleEmail} value={email}/>
         <br></br>
         <Box sx={{ width: 300 }}>
         <Slider
         aria-label="Miles"
         defaultValue={1}
-        getAriaValueText={handleSetDistance}
+        onChange={handleSetDistance}
         valueLabelDisplay="auto"
         step={1}
         marks
         min={1}
         max={5}
+        value={distance}
       />
       </Box>
         <br></br>
-        <input type='text' placeholder='Your Location' onChange={handleLocation}/>
+        <input type='text' placeholder='Your Location' onChange={handleLocation} value={location}/>
         <br></br>
-        <input type='password' placeholder='Super Secret Password' onChange={handlePassword}/>
+        <input type='password' placeholder='Super Secret Password' onChange={handlePassword} value={password}/>
         <br></br>
-        <button onClick={handleSignUp}> Sign up </button>
+        <button type='submit' > Sign up </button>
       </form>
       <NavLink to="/login" ><button>Go to Login</button></NavLink>
     </div>

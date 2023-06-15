@@ -24,7 +24,6 @@ loginController.signUp = async (req, res, next) => {
       walking_distance,
       location,
     } = req.body;
-
     const created_at = moment().format('YYYY-MM-DD');
 
     const hashedPass = await bcrypt.hash(password, workFactor);

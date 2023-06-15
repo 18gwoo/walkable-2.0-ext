@@ -8,18 +8,10 @@ const initialState = {
   imgUrl: '',
   radius: 1,
   location: '',
-  loginStatus: false,
 };
 
 const userReducer = createReducer(initialState, (builder) => {
   builder.addCase(actions.setUserActionCreator, (state, action) => {
-    // password,
-    // email,
-    // first_name,
-    // last_name,
-    // img_url,
-    // walking_distance,
-    // location,
 
     const {
       first_name,
@@ -28,16 +20,14 @@ const userReducer = createReducer(initialState, (builder) => {
       img_url,
       walking_distance,
       location,
-      loginStatus,
     } = action.payload;
     return (state = {
-      firstName,
-      lastName,
+      firstName: first_name,
+      lastName: last_name,
       email,
-      imgUrl,
-      radius,
+      imgUrl: img_url,
+      radius: walking_distance,
       location,
-      loginStatus,
     });
   });
 });

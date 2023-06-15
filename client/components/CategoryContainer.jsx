@@ -4,19 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setSearchActionCreator } from '../actions/actions';
 
 export default function CategoryContainer({ type, radius, location }) {
-    // { type, location, radius }
-    // test data for searchState
-    // const type = 'Test', location = 'TestTest', radius = 200;
     
     // dispatch used to set state
     const dispatch = useDispatch();
 
+    // used to navigate user to search
     const navigate = useNavigate();
 
     // handle category click
     const onCategoryClick =  async () => {
       try {
-        dispatch(setSearchActionCreator({type, location, radius}))
+        dispatch(setSearchActionCreator({type, query: location, radius}))
         navigate('/search');
        } catch (e) {
         console.log(e.message);
