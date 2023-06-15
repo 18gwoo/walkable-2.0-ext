@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Result from '../components/Result';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -30,41 +30,43 @@ export default function search() {
 
   const dispatch = useDispatch();
 
-
+  console.log(type, radius, query);
   // post request to get results from search
-  // const generateCategoryResults = async () => {
-  //   try {
-  //   const settings = {
-  //     method: 'POST',
-  //     headers: {
-  //        'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         type,
-  //         radius: radius*1600, // converting miles to meters
-  //         query: location,
-  //       })
-  //     }
+  const generateCategoryResults = async () => {
+    try {
+    const settings = {
+      method: 'POST',
+      headers: {
+         'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: type,
+          radius: radius, 
+          query: query,
+        })
+      }
+    if (type !== '' && radius !== 0 && location !== '') { 
 
-  //   if (type !== '' && radius !== 0 && location !== '') { 
-  //     const data = await fetch('/api/getLocationResults', settings);
-  //     const response = await data.json(); // array of objects
-  //     // walk time num used here to sort response
-  //     const resultsArray = [];
-  //       response.places.forEach(place => {
-  //         const {name, address, distance, walktime, favorited} = place;
-  //         resultsArray.push(<Result name={name} address={address} distance={distance} walktime={walktime} favorited={favorited}></Result>)
-  //       });
-  //     setRenderResults(resultsArray);
-  //   }
+      const data = await fetch('/api/getLocationResults', settings);
+    
+      const response = await data.json(); // array of objects
+      console.log('i am the response', response)
+      response.places.sort((a, b) => a.walktime_num - b.walktime_num);
+      const resultsArray = [];
+        response.places.forEach(place => {
+          const {name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num} = place;
+          resultsArray.push(<Result name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url ={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
+        });
+      setRenderResults(resultsArray);
+    }
 
-  //   }
-  //   catch (e) {
-  //     console.log('didnt work')
-  //     console.log(e.message);
-  //   };
-  // }
+    }
+    catch (e) {
+      console.log('category didnt work')
+      console.log(e.message);
+    };
+  }
 
 
   const generateSearchResults = async (e) => {
@@ -117,50 +119,77 @@ export default function search() {
     setRadiusNum(e.target.value);
   };
 
-  // generateCategoryResults();
-  console.log(coordMap)
-  console.log(centerMap)
-  return (
-    <section className='app-wrapper'>
+
+useEffect(() => {
+  generateCategoryResults();
+}, []);
+
+const marks = [
+  {
+    value: 1,
+    label: '1 mi',
+  },
+  {
+    value: 2,
+    label: '2 mi',
+  },
+  {
+    value: 3,
+    label: '3 mi',
+  },
+  {
+    value: 4,
+    label: '4 mi',
+  },
+  {
+    value: 5,
+    label: '5 mi',
+  },
+];
+
+return (
+  <section className='app-wrapper'>
+    <div>
+      <form onSubmit={generateSearchResults}>
+        <input type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
+        <Box sx={{ width: 300 }}>
+          <FormControl fullWidth>
+            <InputLabel >Place</InputLabel>
+            <Select
+              value={searchType}
+              label="Place"
+              onChange={handleTypeDropdown}
+            >
+              <MenuItem value={'restaurant'}>Restaurant</MenuItem>
+              <MenuItem value={'bar'}>Bar</MenuItem>
+              <MenuItem value={'park'}>Park</MenuItem>
+              <MenuItem value={'store'}>Store</MenuItem>
+              <MenuItem value={'cafe'}>Cafe</MenuItem>
+            </Select>
+          </FormControl>
+          <Slider
+            aria-label="Miles"
+            defaultValue={1}
+            onChange={handleRadiusSlider}
+            valueLabelDisplay="auto"
+            step={1}
+            marks = {marks}
+            min={1}
+            max={5}
+            value={radiusNum}
+          />
+        </Box>
+        <button>Search</button>
+      </form>
       <div>
-        <form onSubmit={generateSearchResults}>
-          <input type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
-          <Box sx={{ width: 300 }}>
-            <FormControl fullWidth>
-              <InputLabel >Place</InputLabel>
-              <Select
-                value={searchType}
-                label="Place"
-                onChange={handleTypeDropdown}
-              >
-                <MenuItem value={'restaurant'}>Restaurant</MenuItem>
-                <MenuItem value={'bar'}>Bar</MenuItem>
-                <MenuItem value={'park'}>Park</MenuItem>
-                <MenuItem value={'store'}>Store</MenuItem>
-                <MenuItem value={'cafe'}>Cafe</MenuItem>
-              </Select>
-            </FormControl>
-            <Slider
-              aria-label="Miles"
-              defaultValue={1}
-              onChange={handleRadiusSlider}
-              valueLabelDisplay="auto"
-              step={1}
-              marks
-              min={1}
-              max={5}
-              value={radiusNum}
-            />
-          </Box>
-          <button>Search</button>
-        </form>
-        <div>
-          <div>Showing {type} in {query} within {radius} miles</div>
-          {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
-        </div>
-        {renderResults.length ? <Map centerMap={centerMap} markers={coordMap} /> : <div> Map is loading... </div>}
-        {/* {coordMap.length && } */}
+        <div>Showing {type} in {query} within {radius/1600} miles</div>
+        {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
       </div>
-    </section>
-  )
+      {renderResults.length ? <Map centerMap={centerMap} markers={coordMap} /> : <div> Map is loading... </div>}
+      {/* {coordMap.length && } */}
+    </div>
+  </section>
+)
 }
+
+ 
