@@ -1,4 +1,16 @@
 {
+  "name": "Walkable 2.0 an Iteration Project",
+  "description": "A web app designed to provide restaurants and activites in a walkable distance from the users location.",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server/server.js",
+    "build": "NODE_ENV=production webpack",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --hot --progress --color\" \"nodemon ./server/server.js\""
+  },
+  "keywords": [],
+  "author": "Garrett Woo,Alec Jensen, Bryan Trang, and Vivek Patel",
+  "license": "ISC",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -25,7 +37,7 @@
     "react-places-autocomplete": "^7.3.0",
     "react-redux": "^8.1.0",
     "react-router": "^6.12.0",
-    "react-router-dom,": "^6.12.0",
+    "react-router-dom": "^6.12.0",
     "react-scripts": "^5.0.1",
     "sass": "^1.62.1"
   },
@@ -54,17 +66,5 @@
     "webpack-cli": "^5.1.3",
     "webpack-dev-server": "^4.15.0",
     "webpack-hot-middleware": "^2.25.3"
-  },
-  "name": "walkable",
-  "description": "A web app designed to provide restaurants and activites in a walkable distance from the users location.",
-  "version": "1.0.0",
-  "main": "webpack.config.js",
-  "scripts": {
-    "start": "NODE_ENV=production node server/server.js",
-    "build": "NODE_ENV=production webpack",
-    "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --hot --progress --color\" \"nodemon ./server/server.js\""
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }
