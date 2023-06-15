@@ -1,0 +1,184 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* colors */
+
+$primary-black: #212529;
+
+$grey-1: #343A40;
+$grey-2: #495057;
+$grey-3: #6C757D;
+$grey-4: #CED4DA;
+$grey-5: #E9ECEF;
+$grey-6: #F8F9FA;
+
+$primary-blue: #023047;
+$blue-1: #219EBC;
+$blue-2:  #8ECAE6;
+
+$orange: #FB8500;
+$orange-1: #FFB703;
+
+/* defaults */
+* {
+    font-family: 'Outfit';
+    color: $primary-black;
+}
+
+body {
+    margin: 0px;
+}
+
+
+html {
+    background-color: white;
+}
+
+
+input {
+    margin-bottom: 12px;
+    height: 40px;
+    font-size: 14px;
+    background-color: $grey-5;
+    border: 1px solid $grey-5;
+    border-radius: 5px;
+    padding-left: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* fonts */
+
+h1 {
+    font-weight: 800;
+    font-size: 32px;
+}
+
+h3 {
+    font-weight: 500;
+    font-size: 18px;
+    color: $grey-3;
+}
+
+.regular {
+    font-size: 14px;
+    color: $grey-1;
+}
+
+/* buttons */
+
+.btn {
+    background-color: $blue-1;
+    border: 1px solid $blue-1;
+    color: white;
+    font-weight: 600;
+    border-radius: 5px;
+    height: 40px;
+    width: 100%;
+}
+
+.btn.secondary {
+    background-color: $grey-5;
+    border: 1px solid $grey-5;
+    color: $grey-2;
+}
+
+/* signup and login */
+
+.signup-section {
+    display: flex;
+    overflow: hidden;
+}
+
+.signup-wrapper {
+    padding: 80px 60px 0px 60px;
+    width: 400px;
+    min-width: 250px;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+}
+
+.signup-form {
+    margin-bottom: 40px;
+}
+
+.signup-hero {
+    background-color: $grey-6;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+
+.signup-logo {
+    width: 250px;
+}
+
+.signup-bg {
+    width: 100%;
+    margin-bottom: -50%;
+}
+
+
+.divider {
+    height: 1px;
+    background-color: $grey-4;
+    width: 100%;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.nav-bar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    left: 16px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    background-color: white;
+    border-radius: 100em;
+    height: 60px;
+    border: 1px solid $grey-4;
+}
+
+.nav-bar-item {
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.active {
+    color: $blue-1;
+}
+
+.nav-icon {
+    height: 24px;
+    width: 24px;
+    margin-right: 12px;
+    color: currentColor;
+    stroke: currentColor;
+}
+
+.nav-logo {
+ height: 32px;
+ position: absolute;
+ left: 32px;
+ top: 12px
+}
+
+
+.app-wrapper {
+    margin-top: 120px;
+}
+
+

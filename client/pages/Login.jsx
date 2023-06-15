@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import { setUserActionCreator } from '../actions/actions';
+import bg from '../assets/signup-bg.svg'
+import Logo from '../assets/walkable_logo.svg'
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -45,21 +47,32 @@ export default function Login() {
         navigate('/dashboard');
     }
     catch (e) {
-      console.log(e.message);
+      console.log(e);
     };
   };
   
   return (
-    <div>
-      Login to Walkable
-      <form onSubmit={handleLogin}>  
-        <input type='text' placeholder={'Email Address'} onChange={handleEmail} value={email}/>
+    <section className='signup-section'>
+      <div className='signup-wrapper'>
+      <h1>Welcome Back</h1>
+      <h3>Let's get back to walking...</h3>
+      <form onSubmit={handleLogin} className='signup-form'>  
+        <input type='text' placeholder='Email Address' onChange={handleEmail} value={email}/>
         <br></br>
-        <input type='text' placeholder={'Password'} onChange={handlePassword} value={password}/>
+        <input type='password' placeholder='Super Secret Password' onChange={handlePassword} value={password}/>
         <br></br>
-        <button type='submit'>Login</button>
+        <button className='btn' type='submit'>Login</button>
       </form>
-      <NavLink to="/" ><button>Go To Signup</button></NavLink>
+      <NavLink to="/" ><button className='btn secondary'>Go To Signup</button></NavLink>
     </div>
+    <div className='signup-hero'>
+    <div>
+      <img className='signup-logo' src ={Logo}/>
+    </div>
+    <div className='bg-wrapper'>
+      <img className='signup-bg' src ={bg}/>
+    </div>
+    </div>
+    </section>
     )
 }

@@ -31,6 +31,7 @@ export default function Dashboard() {
     }, [favorites]);
   
   return (
+    <section className='app-wrapper'>
     <div>
       <div>
         <h2>What do you want to do in {location !== '' ? location + '?' : 'your area?'}</h2>
@@ -45,6 +46,7 @@ export default function Dashboard() {
       {renderFavorites}
       </div>
     </div>
+    </section>
   )
 }
 
