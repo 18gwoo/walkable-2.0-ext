@@ -1,12 +1,14 @@
 import React from 'react'
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFavoritesActionCreator } from '../actions/actions';
+
+
 
 export default function Result(props) {
 
   const [isFavorited, setIsFavorited] = useState(false);
-
+  const favorites = useSelector((state) => state.favorites.favorites);
   const dispatch = useDispatch();
 
 
@@ -23,7 +25,7 @@ export default function Result(props) {
       const data = await fetch('/api/addFavorite', settings);
       const response = await data.json(); // new marketList 
       console.log(response);
-      dispatch(setFavoritesActionCreator(response));
+      dispatch(setFavoritesActionCreator(response.data));
         setIsFavorited(true);
     }
     catch (e) {
@@ -46,17 +48,28 @@ export default function Result(props) {
       const data = await fetch('/api/deleteFavorite', settings);
       const response = await data.json();
       console.log(response);
-      dispatch(setFavoritesActionCreator(response));
+      dispatch(setFavoritesActionCreator(response.data));
       setIsFavorited(false);
     }
     catch (e) {
       console.log(e.message);
     }
   };
+
+
+  const inStore = (name) => {
+    for (let i = 0; i < favorites.length; i++) {
+        if (favorites[i].name === name) return true;
+    }
+    return false;
+  };
+  // inStore(props.name)
+  // isFavorited
+
   // name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num
   return (
     <div>Result
-        <button onClick={isFavorited ? handleDeleteFavorite : handleAddFavorite}>{isFavorited ? 'UnFavorite' : 'Add to Favorite'}</button>
+        <button onClick={inStore(props.name) ? handleDeleteFavorite : handleAddFavorite}>{inStore(props.name) ? 'UnFavorite' : 'Add to Favorite'}</button>
         {props.name}
         {props.address}
         {props.phone_number}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Result from '../components/Result';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,53 +19,55 @@ export default function search() {
   const [searchType, setSearchType] = useState('restaurant');
   const [radiusNum, setRadiusNum] = useState(1);
   
-  // get search state and deconstructe the search obj
+  // get search state and deconstruct the search obj
+  
   const searchState = useSelector((state) => state.search);
   const {type, radius, query} = searchState;
-
   const dispatch = useDispatch();
 
-
+  console.log(type, radius, query);
   // post request to get results from search
-  // const generateCategoryResults = async () => {
-  //   try {
-  //   const settings = {
-  //     method: 'POST',
-  //     headers: {
-  //        'Accept': 'application/json',
-  //       'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         type,
-  //         radius: radius*1600, // converting miles to meters
-  //         query: location,
-  //       })
-  //     }
-      
-  //   if (type !== '' && radius !== 0 && location !== '') { 
-  //     const data = await fetch('/api/getLocationResults', settings);
-  //     const response = await data.json(); // array of objects
-  //     // walk time num used here to sort response
-  //     const resultsArray = [];
-  //       response.places.forEach(place => {
-  //         const {name, address, distance, walktime, favorited} = place;
-  //         resultsArray.push(<Result name={name} address={address} distance={distance} walktime={walktime} favorited={favorited}></Result>)
-  //       });
-  //     setRenderResults(resultsArray);
-  //   }
+  const generateCategoryResults = async () => {
+    try {
+    const settings = {
+      method: 'POST',
+      headers: {
+         'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: type,
+          radius: radius, 
+          query: query,
+        })
+      }
+    if (type !== '' && radius !== 0 && location !== '') { 
 
-  //   }
-  //   catch (e) {
-  //     console.log('didnt work')
-  //     console.log(e.message);
-  //   };
-  // }
+      const data = await fetch('/api/getLocationResults', settings);
+    
+      const response = await data.json(); // array of objects
+      console.log('i am the response', response)
+      response.places.sort((a, b) => a.walktime_num - b.walktime_num);
+      const resultsArray = [];
+        response.places.forEach(place => {
+          const {name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num} = place;
+          resultsArray.push(<Result name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url ={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
+        });
+      setRenderResults(resultsArray);
+    }
+
+    }
+    catch (e) {
+      console.log('category didnt work')
+      console.log(e.message);
+    };
+  }
 
 
   const generateSearchResults = async (e) => {
     e.preventDefault();
     try {
-      dispatch(setSearchActionCreator({type: searchType, query: searchValue, radius: radiusNum}));
+      dispatch(setSearchActionCreator({type: searchType, query: searchValue, radius: radiusNum * 1600}));
       const settings = {
         method: 'POST',
         headers: {
@@ -74,7 +76,7 @@ export default function search() {
           },
           body: JSON.stringify({
             type: searchType,
-            radius: radiusNum*1600, // converting miles to meters
+            radius: radiusNum * 1600,
             query: searchValue,
           })
         }
@@ -91,7 +93,7 @@ export default function search() {
       setRenderResults(resultsArray);
     }
     catch(e) {
-      console.log('Not Working');
+      console.log('Search not working');
       console.log(e.message);
     }
   };
@@ -109,7 +111,33 @@ const handleRadiusSlider = (e) => {
   setRadiusNum(e.target.value);
 };
 
-// generateCategoryResults();
+
+useEffect(() => {
+  generateCategoryResults();
+}, []);
+
+const marks = [
+  {
+    value: 1,
+    label: '1 mi',
+  },
+  {
+    value: 2,
+    label: '2 mi',
+  },
+  {
+    value: 3,
+    label: '3 mi',
+  },
+  {
+    value: 4,
+    label: '4 mi',
+  },
+  {
+    value: 5,
+    label: '5 mi',
+  },
+];
 
   return (
     <section className='app-wrapper'>
@@ -137,7 +165,7 @@ const handleRadiusSlider = (e) => {
         onChange={handleRadiusSlider}
         valueLabelDisplay="auto"
         step={1}
-        marks
+        marks={marks}
         min={1}
         max={5}
         value={radiusNum}
@@ -146,7 +174,7 @@ const handleRadiusSlider = (e) => {
       <button>Search</button>
       </form>
       <div>
-        <div>Showing {type} in {query} within {radius} miles</div>
+        <div>Showing {type} in {query} within {radius/1600} miles</div>
         {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
       </div>
     </div>

@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserActionCreator } from '../actions/actions';
+import { setFavoritesActionCreator } from '../actions/actions';
 import bg from '../assets/signup-bg.svg'
 import Logo from '../assets/walkable_logo.svg'
 
@@ -50,6 +51,24 @@ export default function Login() {
       console.log(e);
     };
   };
+
+
+  // const onClickLoadFavorites = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const data = await fetch('/api/getAllFavorites');
+  //     const response = await data.json(); 
+  //     console.log(response);
+  //     dispatch(setFavoritesActionCreator(response.data));
+  //   }
+  //   catch (e) {
+  //     console.log('Failed to fetch on render - getFavoritesOnLoad')
+  //     console.log(e.message)
+  //   };
+  // };
+
+  // ; onClickLoadFavorites();
+
   
   return (
     <section className='signup-section'>

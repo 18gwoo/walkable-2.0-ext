@@ -14,7 +14,7 @@ const searchReducer = createReducer(initialState, (builder) => {
       return (state = {
         type,
         query,
-        radius,
+        radius: radius,
       });
     })
     .addDefaultCase((state, action) => state);

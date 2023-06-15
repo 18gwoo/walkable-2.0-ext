@@ -4,31 +4,60 @@ import { useSelector, useDispatch } from 'react-redux';
 import CategoryContainer from '../components/CategoryContainer'
 import { setFavoritesActionCreator } from '../actions/actions';
 import Result from '../components/Result';
+import { render } from 'react-dom';
 
 export default function Dashboard() {
   const [renderFavorites, setRenderFavorites] = useState([]);
   const user = useSelector((state) => state.user);
-  const favorites = useSelector((state) => state.favorites.favorites);
-  console.log('favorites global:', favorites);
   const {location, radius} = user;
+  const favorites = useSelector((state) => state.favorites.favorites);
 
   // create a const array to hold all favorites
   const dispatch = useDispatch();
-  
-    // build favorites from favorites
-    const getFavorites = () => {
-      const favoritesArray = [];
+
+  //  console.log('FAVORITE STORE', favorites);
+  //   // build favorites from favorites
+    const renderFavoriteResults = async () => {
+      try {
+        const favoritesArray = [];
         favorites.forEach(favorite => {
           const {name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num} = favorite; // store
           favoritesArray.push(<Result name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url ={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
         });
-      setRenderFavorites(favoritesArray);
+        console.log('favArray:',favoritesArray);
+        setRenderFavorites(favoritesArray);
+      }
+      catch (e) {
+        console.log(e.message);
+      }
+
     }
+
+    // get initial favorites
+
+    async function getFavorites() {
+      try {
+        const data = await fetch('/api/getAllFavorites');
+        const response = await data.json(); 
+        console.log(response);
+        dispatch(setFavoritesActionCreator(response.data));
+        // setStoreFavorites(response.data);
+      }
+      catch (e) {
+        console.log(e.message)
+      };
+    }
+
  
     // useEffect to fetch new favorites from db when state changes
     useEffect(() => {
-      getFavorites();
-    }, [favorites]);
+    getFavorites();
+    }, []);
+
+   useEffect(() => {
+    renderFavoriteResults();
+   }, [favorites]);
+
   
   return (
     <section className='app-wrapper'>
@@ -43,7 +72,7 @@ export default function Dashboard() {
       </div>
       <div>
       <h2>Your Favorites</h2>
-      {renderFavorites}
+      {renderFavorites.length ? renderFavorites : <div> You have no favorites </div>}
       </div>
     </div>
     </section>
