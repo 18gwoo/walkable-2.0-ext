@@ -112,6 +112,7 @@ const handleRadiusSlider = (e) => {
 // generateCategoryResults();
 
   return (
+    <section className='app-wrapper'>
     <div>
       <form onSubmit={generateSearchResults}>
       <input type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue}/>
@@ -149,5 +150,6 @@ const handleRadiusSlider = (e) => {
         {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
       </div>
     </div>
+    </section>
   )
 }
