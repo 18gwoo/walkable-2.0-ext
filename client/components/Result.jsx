@@ -77,7 +77,7 @@ export default function Result(props) {
           <p className={props.opening_hours === 'true' ? 'result-opening' : 'result-opening closed'}>{props.opening_hours === 'true' ? 'Open' : 'Closed'}</p>
         </div>
           <p className='result-address'>{props.address}</p>
-        <div>
+        <div className='result-walking'>
           {props.distance} • 
           {props.walktime}
         </div>

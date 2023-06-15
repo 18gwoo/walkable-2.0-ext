@@ -256,23 +256,22 @@ h3 {
   position: absolute;
   right: 0;
   bottom: 0;
-};
+}
 
 .dashboard-woman {
   position: absolute;
   left: 0;
   bottom: 0;
   margin-left: -30px;
-};
+}
 
 
 .render-wrapper {
  display: grid;
  grid-template-columns: 1fr 1fr 1fr;
- column-gap: 10px;
- row-gap: 10px;
-};
-
+ column-gap: 12px;
+ row-gap: 12px;
+}
 
 .result-wrapper {
   background-color: white;
@@ -286,31 +285,32 @@ h3 {
   width: 100%;
   border-radius: 15px;
   max-height: 150px;
-};
+}
 
 .result-title-div {
   display: flex;
   justify-content: space-between;
   align-items: center;
-};
+}
 
 .result-name {
   font-size: 18px;
   font-weight: 700;
   flex-wrap: wrap;
-};
+}
 
 
 .result-opening {
   font-weight: 700;
   color: green
-};
+}
 
 .result-opening.closed {
   color: $grey-3;
 }
 
 .result-address {
-  
-};
+  color: $grey-3;
+  font-size: 14px;
+}
 
