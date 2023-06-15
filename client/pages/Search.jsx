@@ -13,9 +13,6 @@ import Box from '@mui/material/Box';
 import Map from './Map'
 
 
-
-
-
 export default function search() {
   const [renderResults, setRenderResults] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -47,23 +44,24 @@ export default function search() {
         })
       }
     if (type !== '' && radius !== 0 && location !== '') { 
-
       const data = await fetch('/api/getLocationResults', settings);
-    
       const response = await data.json(); // array of objects
-      console.log('i am the response', response)
       response.places.sort((a, b) => a.walktime_num - b.walktime_num);
       const resultsArray = [];
-        response.places.forEach(place => {
-          const {name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num} = place;
-          resultsArray.push(<Result name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url ={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
+      const coordArray = []
+        response.places.forEach((place, i) => {
+          const {name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = place;
+          coordArray.push(coordinates);
+          resultsArray.push(<Result key={i} name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url ={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
         });
+      setCenterMap(response.places[0].center)
+      setCoordMap(coordArray)
       setRenderResults(resultsArray);
     }
 
     }
     catch (e) {
-      console.log('category didnt work')
+      console.log('category did not work')
       console.log(e.message);
     };
   }
@@ -72,7 +70,7 @@ export default function search() {
   const generateSearchResults = async (e) => {
     e.preventDefault();
     try {
-      dispatch(setSearchActionCreator({ type: searchType, query: searchValue, radius: radiusNum }));
+      dispatch(setSearchActionCreator({ type: searchType, query: searchValue, radius: radiusNum*1600 }));
       const settings = {
         method: 'POST',
         headers: {
@@ -88,12 +86,11 @@ export default function search() {
       const data = await fetch('/api/getLocationResults', settings);
       const response = await data.json();
       response.places.sort((a, b) => a.walktime_num - b.walktime_num);
-      console.log('i am the response', response)
       const resultsArray = [];
       const coordArray = []
       response.places.forEach((place, i) => {
         const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = place;
-        coordArray.push(coordinates)
+        coordArray.push(coordinates);
         resultsArray.push(<Result key={i} name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
       });
       setCenterMap(response.places[0].center)
@@ -183,7 +180,7 @@ return (
       </form>
       <div>
         <div>Showing {type} in {query} within {radius/1600} miles</div>
-        {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
+        {renderResults.length ? <div className='render-wrapper'> {renderResults} </div> : <div> Search for nearby walkable places </div>}
       </div>
       {renderResults.length ? <Map centerMap={centerMap} markers={coordMap} /> : <div> Map is loading... </div>}
       {/* {coordMap.length && } */}

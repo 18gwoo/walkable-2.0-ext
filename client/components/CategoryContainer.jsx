@@ -2,6 +2,12 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchActionCreator } from '../actions/actions';
+import BarIcon from '../assets/bar.svg';
+import CafeIcon from '../assets/cafe.svg';
+import FoodIcon from '../assets/food.svg';
+import StoreIcon from '../assets/store.svg';
+import TreeIcon from '../assets/tree.svg';
+import { ClassNames } from '@emotion/react';
 
 export default function CategoryContainer({ type, radius, location }) {
     
@@ -21,12 +27,20 @@ export default function CategoryContainer({ type, radius, location }) {
       }
     };
 
+    const photoObj = {
+      restaurant: FoodIcon,
+      cafe: CafeIcon,
+      park: TreeIcon,
+      bar: BarIcon,
+      store: StoreIcon,
+    }
+
   return (
-    <div style={{width: "50px", height: "50px"}}>
-        <NavLink to='/search'>
-        <button onClick={onCategoryClick}>
-            {type}
-            <img></img>
+    <div>
+        <NavLink to='/search' className="category-nav">
+        <button onClick={onCategoryClick} className='category-button'>
+        <img src={photoObj[type]} className="category-photo"/>    
+            <h3>{type}</h3>
         </button>
         </NavLink>
     </div>
