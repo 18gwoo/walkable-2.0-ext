@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 // import FavoritesContainer from '../components/favoritesContainer'
 import CategoryContainer from '../components/CategoryContainer'
 import { setFavoritesActionCreator } from '../actions/actions';
+import Man from '../assets/man.svg';
+import Woman from '../assets/woman.svg';
 import Result from '../components/Result';
 import { render } from 'react-dom';
 
@@ -62,17 +64,23 @@ export default function Dashboard() {
   return (
     <section className='app-wrapper'>
     <div>
-      <div>
-        <h2>What do you want to do in {location !== '' ? location + '?' : 'your area?'}</h2>
-        <CategoryContainer type={'restaurant'} location={location} radius={radius}/>
-        <CategoryContainer type={'bar'} location={location} radius={radius}/>
-        <CategoryContainer type={'park'} location={location} radius={radius}/>
-        <CategoryContainer type={'store'} location={location} radius={radius}/>
-        <CategoryContainer type={'cafe'} location={location} radius={radius}/>
+      <div className='category-div'> 
+      <img src={Woman} className='dashboard-woman'/>
+      <img src={Man} className='dashboard-man'/>
+        <h2>What do you want to do around {location !== '' ? location + '?' : 'your area?'}</h2>
+        <div className='category-container'> 
+          <CategoryContainer type={'restaurant'} location={location} radius={radius}/>
+          <CategoryContainer type={'bar'} location={location} radius={radius}/>
+          <CategoryContainer type={'park'} location={location} radius={radius}/>
+          <CategoryContainer type={'store'} location={location} radius={radius}/>
+          <CategoryContainer type={'cafe'} location={location} radius={radius}/>
+        </div>
       </div>
       <div>
       <h2>Your Favorites</h2>
-      {renderFavorites.length ? renderFavorites : <div> You have no favorites </div>}
+      <div className='render-wrapper'>
+        {renderFavorites.length ? renderFavorites : <div> You have no favorites </div>}
+      </div>
       </div>
     </div>
     </section>

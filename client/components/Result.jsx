@@ -68,13 +68,24 @@ export default function Result(props) {
 
   // name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num
   return (
-    <div>Result
-        <button onClick={inStore(props.name) ? handleDeleteFavorite : handleAddFavorite}>{inStore(props.name) ? 'UnFavorite' : 'Add to Favorite'}</button>
-        {props.name}
-        {props.address}
-        {props.phone_number}
-        {props.walktime}
-        {props.distance}
+    <div className='result-wrapper'>
+      <a href={props.google_url} target= '_blank'>
+        <img src={props.photo_url} className='result-photo'/>
+      </a>
+        <div className='result-title-div'>
+          <p className='result-name'>{props.name}</p>
+          <p className={props.opening_hours === 'true' ? 'result-opening' : 'result-opening closed'}>{props.opening_hours === 'true' ? 'Open' : 'Closed'}</p>
+        </div>
+          <p className='result-address'>{props.address}</p>
+        <div className='result-walking'>
+          {props.distance} • 
+          {props.walktime}
+        </div>
+        
+        {/* {props.phone_number !== undefined ? props.phone_number : 'No Phone Number'} */}
+        {/* {props.ratings} */}
+        
+        <button className={inStore(props.name) ? 'btn secondary' : 'btn'} onClick={inStore(props.name) ? handleDeleteFavorite : handleAddFavorite}>{inStore(props.name) ? 'Unfavorite' : 'Add to Favorite'}</button>
     </div>
   )
 }

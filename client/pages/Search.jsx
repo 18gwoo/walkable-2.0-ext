@@ -13,9 +13,6 @@ import Box from '@mui/material/Box';
 import Map from './Map'
 
 
-
-
-
 export default function search() {
   const [renderResults, setRenderResults] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -47,6 +44,7 @@ export default function search() {
           query: query,
         })
       }
+
       if (type !== '' && radius !== 0 && location !== '') {
 
         const data = await fetch('/api/getLocationResults', settings);
@@ -61,10 +59,9 @@ export default function search() {
         });
         setRenderResults(resultsArray);
       }
-
     }
     catch (e) {
-      console.log('category didnt work')
+      console.log('category did not work')
       console.log(e.message);
     };
   }
@@ -73,7 +70,7 @@ export default function search() {
   const generateSearchResults = async (e) => {
     e.preventDefault();
     try {
-      dispatch(setSearchActionCreator({ type: searchType, query: searchValue, radius: radiusNum }));
+      dispatch(setSearchActionCreator({ type: searchType, query: searchValue, radius: radiusNum*1600 }));
       const settings = {
         method: 'POST',
         headers: {
@@ -89,11 +86,12 @@ export default function search() {
       const data = await fetch('/api/getLocationResults', settings);
       const response = await data.json();
       response.places.sort((a, b) => a.walktime_num - b.walktime_num);
-      console.log('i am the response', response)
       const resultsArray = [];
 
       response.places.forEach((place, i) => {
         const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = place;
+
+
 
 
         resultsArray.push(<Result key={i} name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
@@ -152,6 +150,7 @@ export default function search() {
   return (
     <section className='app-wrapper'>
       <div>
+
         <form onSubmit={generateSearchResults}>
           <input type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
           <Box sx={{ width: 300 }}>
@@ -188,6 +187,8 @@ export default function search() {
           {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
         </div>
         {renderResults.length ? <Map centerMap={centerMap} markers={info} /> : <div> Map is loading... </div>}
+
+
 
       </div>
     </section>
