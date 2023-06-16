@@ -19,7 +19,7 @@ module.exports = {
       template: './index.html',
     }),
     new webpack.DefinePlugin({
-      "REACT_APP_GOOGLE_API_KEY": JSON.stringify('AIzaSyBUCar8WeDpZDqcnt0BjnIMMMHIbJ5wn8E')
+      "REACT_APP_GOOGLE_API_KEY": JSON.stringify(process.env.GOOGLE_API_KEY)
     })
   ],
 
