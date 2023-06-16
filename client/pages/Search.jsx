@@ -10,10 +10,11 @@ import Slider from '@mui/material/Slider';
 import Select from '@mui/material/Select';
 import { setSearchActionCreator } from '../actions/actions';
 import Box from '@mui/material/Box';
-import Map from './Map'
+import Map from '../components/Map'
 
 
 export default function search() {
+  const [loading, setLoading] = useState(false);
   const [renderResults, setRenderResults] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [searchType, setSearchType] = useState('restaurant');
@@ -32,6 +33,7 @@ export default function search() {
   // post request to get results from search
   const generateCategoryResults = async () => {
     try {
+      setLoading(true);
       const settings = {
         method: 'POST',
         headers: {
@@ -53,10 +55,13 @@ export default function search() {
         console.log('i am the response', response)
         response.places.sort((a, b) => a.walktime_num - b.walktime_num);
         const resultsArray = [];
-        response.places.forEach(place => {
+        response.places.forEach((place, i) => {
           const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num } = place;
-          resultsArray.push(<Result name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
+          resultsArray.push(<Result key={i} name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
         });
+        setLoading(false);
+        setCenterMap(response.places[0].center)
+        setInfo(response.places)
         setRenderResults(resultsArray);
       }
     }
@@ -70,6 +75,7 @@ export default function search() {
   const generateSearchResults = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       dispatch(setSearchActionCreator({ type: searchType, query: searchValue, radius: radiusNum*1600 }));
       const settings = {
         method: 'POST',
@@ -91,11 +97,9 @@ export default function search() {
       response.places.forEach((place, i) => {
         const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = place;
 
-
-
-
         resultsArray.push(<Result key={i} name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
       });
+      setLoading(false);
       setCenterMap(response.places[0].center)
       setInfo(response.places)
       setRenderResults(resultsArray);
@@ -149,47 +153,47 @@ export default function search() {
 
   return (
     <section className='app-wrapper'>
-      <div>
-
-        <form onSubmit={generateSearchResults}>
-          <input type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
-          <Box sx={{ width: 300 }}>
-            <FormControl fullWidth>
-              <InputLabel >Place</InputLabel>
-              <Select
-                value={searchType}
-                label="Place"
-                onChange={handleTypeDropdown}
-              >
-                <MenuItem value={'restaurant'}>Restaurant</MenuItem>
-                <MenuItem value={'bar'}>Bar</MenuItem>
-                <MenuItem value={'park'}>Park</MenuItem>
-                <MenuItem value={'store'}>Store</MenuItem>
-                <MenuItem value={'cafe'}>Cafe</MenuItem>
-              </Select>
-            </FormControl>
-            <Slider
-              aria-label="Miles"
-              defaultValue={1}
-              onChange={handleRadiusSlider}
-              valueLabelDisplay="auto"
-              step={1}
-              marks={marks}
-              min={1}
-              max={5}
-              value={radiusNum}
-            />
-          </Box>
-          <button>Search</button>
-        </form>
-        <div>
-          <div>Showing {type} in {query} within {radius / 1600} miles</div>
-          {renderResults.length ? renderResults : <div> Search for nearby walkable places </div>}
+      <div className='search-wrapper'>
+        <div className='left-div'>
+            <form onSubmit={generateSearchResults}>
+              <input className='search-field' type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
+              <Box sx={{marginTop: "16px", marginBottom: "16px"}}>
+                <FormControl fullWidth>
+                  <InputLabel >Place</InputLabel>
+                  <Select
+                    value={searchType}
+                    label="Place"
+                    onChange={handleTypeDropdown}
+                  >
+                    <MenuItem value={'restaurant'}>Restaurant</MenuItem>
+                    <MenuItem value={'bar'}>Bar</MenuItem>
+                    <MenuItem value={'park'}>Park</MenuItem>
+                    <MenuItem value={'store'}>Store</MenuItem>
+                    <MenuItem value={'cafe'}>Cafe</MenuItem>
+                  </Select>
+                </FormControl>
+                <Slider
+                  aria-label="Miles"
+                  defaultValue={1}
+                  onChange={handleRadiusSlider}
+                  valueLabelDisplay="auto"
+                  step={1}
+                  marks={marks}
+                  min={1}
+                  max={5}
+                  value={radiusNum}
+                  sx={{marginTop: "16px", marginBottom: "16px"}}
+                />
+              </Box>
+              <button className='btn'>Search</button>
+            </form>
+              <h2>Showing {type} in {query} within {radius / 1600} miles</h2>
+              
+              {renderResults.length ? <div className='render-wrapper two'> {renderResults} </div> : <div> <h3>Search for nearby walkable places</h3> </div>}
         </div>
-        {renderResults.length ? <Map centerMap={centerMap} markers={info} /> : <div> Map is loading... </div>}
-
-
-
+        <div className='right-div'>
+          {renderResults.length ? <Map centerMap={centerMap} markers={info} /> : <div> <h3> Map is loading... </h3> </div>}
+        </div>
       </div>
     </section>
   )

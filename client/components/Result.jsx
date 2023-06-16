@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFavoritesActionCreator } from '../actions/actions';
+import WalkIcon from '../assets/walk-icon.svg';
 
 
 
@@ -32,7 +33,7 @@ export default function Result(props) {
       console.log(e.message);
     }
   };
-
+  console.log(props.photo_url);
 
   const handleDeleteFavorite = async () => {
     try {
@@ -78,14 +79,16 @@ export default function Result(props) {
         </div>
           <p className='result-address'>{props.address}</p>
         <div className='result-walking'>
-          {props.distance} • 
-          {props.walktime}
+          <img src={WalkIcon} className='result-walk-icon' />
+          <p style={{marginRight: "8px"}}>{props.distance}</p>•
+          <p style={{marginLeft: "8px"}}>{props.walktime}</p>
         </div>
         
         {/* {props.phone_number !== undefined ? props.phone_number : 'No Phone Number'} */}
         {/* {props.ratings} */}
-        
+        <div className='results-button'>
         <button className={inStore(props.name) ? 'btn secondary' : 'btn'} onClick={inStore(props.name) ? handleDeleteFavorite : handleAddFavorite}>{inStore(props.name) ? 'Unfavorite' : 'Add to Favorite'}</button>
+        </div>
     </div>
   )
 }

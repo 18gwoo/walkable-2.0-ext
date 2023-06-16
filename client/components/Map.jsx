@@ -7,11 +7,11 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Link } from '@mui/material';
-import bar from '../assets/bar.svg'
-import cafe from '../assets/cafe.svg'
-import restaurant from '../assets/food.svg'
-import store from '../assets/store.svg'
-import park from '../assets/tree.svg'
+import bar from '../assets/map2.svg'
+import cafe from '../assets/map3.svg'
+import restaurant from '../assets/map5.svg'
+import store from '../assets/map4.svg'
+import park from '../assets/map1.svg'
 
 
 
@@ -37,7 +37,7 @@ const Map = ({ centerMap, markers }) => {
         <GoogleMap
           mapContainerClassName="map-container"
           center={center}
-          zoom={11}
+          zoom={13}
         >
           {markers.map((element, i) => {
             const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = element

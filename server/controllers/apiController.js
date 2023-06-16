@@ -79,7 +79,7 @@ apiController.getLocationResults = async (req, res, next) => {
       // console.log(el.photos[0].photo_reference) // THIS IS THE PROBLEM :       ^ )))))))))))
 
 
-      let photoUrl = `https://imgflip.com/i/7na0pr`
+      let photoUrl = `https://i.imgflip.com/7na0pr.jpg`
       if (el.photos !== undefined) {
         photoUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${el.photos[0].photo_reference}&key=${key}`
       }
