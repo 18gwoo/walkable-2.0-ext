@@ -14,9 +14,6 @@ import store from '../assets/map4.svg'
 import park from '../assets/map1.svg'
 
 
-
-
-
 const Map = ({ centerMap, markers }) => {
   const [selectedElement, setSelectedElement] = useState(false);
   const [activeMarker, setActiveMarker] = useState(null);

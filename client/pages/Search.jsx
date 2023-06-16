@@ -11,6 +11,7 @@ import Select from '@mui/material/Select';
 import { setSearchActionCreator } from '../actions/actions';
 import Box from '@mui/material/Box';
 import Map from '../components/Map'
+import Skeleton from 'react-loading-skeleton'
 
 
 export default function search() {
@@ -187,12 +188,11 @@ export default function search() {
               </Box>
               <button className='btn'>Search</button>
             </form>
-              <h2>Showing {type} in {query} within {radius / 1600} miles</h2>
-              
-              {renderResults.length ? <div className='render-wrapper two'> {renderResults} </div> : <div> <h3>Search for nearby walkable places</h3> </div>}
+              <h2>{type !== '' && query !== '' && radius !== 0 ? `Showing ${type} in ${query} within ${radius / 1600} miles` : 'Start a search to get Walkable results'}</h2>
+              {renderResults.length ? <div className='render-wrapper two'> {renderResults} </div> : <div><h3>Search for walkable places</h3> </div>}
         </div>
         <div className='right-div'>
-          {renderResults.length ? <Map centerMap={centerMap} markers={info} /> : <div> <h3> Map is loading... </h3> </div>}
+          {renderResults.length ? <Map centerMap={centerMap} markers={info} /> : <div> <h3> Start search for mapped results</h3> </div>}
         </div>
       </div>
     </section>

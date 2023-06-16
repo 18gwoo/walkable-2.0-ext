@@ -201,10 +201,12 @@ h3 {
 
 
 .mapTwo {
-  height: 80%;
-  width: 60%;
+  width: 100%;
+  max-width: 53%;
+  height: 100%;
   position: fixed;
   border-radius: 15px;
+  overflow: hidden;
 }
 
 .map-container {
@@ -326,6 +328,8 @@ h3 {
   color: $grey-3;
   font-size: 14px;
   font-weight: 500;
+  height: 40px;
+  overflow: hidden;
 }
 
 .result-walking {
@@ -333,6 +337,8 @@ h3 {
   align-items: center;
   margin-bottom: 16px;
   font-size: 14px;
+  height: 40px;
+  overflow: hidden;
 }
 
 .result-walk-icon {
@@ -340,7 +346,6 @@ h3 {
   height: 32px;
   margin-right: 12px
 }
-
 
 .search-wrapper {
   display: flex;
