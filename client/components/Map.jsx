@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, InfoWindow, Marker, useLoadScript } from '@react-google-maps/api';
-import { useMemo } from "react";
+import { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, Link } from '@mui/material';
-import bar from '../assets/map2.svg'
-import cafe from '../assets/map3.svg'
-import restaurant from '../assets/map5.svg'
-import store from '../assets/map4.svg'
-import park from '../assets/map1.svg'
+import bar from '../assets/map2.svg';
+import cafe from '../assets/map3.svg';
+import restaurant from '../assets/map5.svg';
+import store from '../assets/map4.svg';
+import park from '../assets/map1.svg';
 
 
 const Map = ({ centerMap, markers }) => {
@@ -19,9 +19,8 @@ const Map = ({ centerMap, markers }) => {
   const [activeMarker, setActiveMarker] = useState(null);
   const [showInfoWindow, setInfoWindowFlag] = useState(true);
 
-
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: REACT_APP_GOOGLE_API_KEY
+    googleMapsApiKey: process.env.GOOGLE_API_KEY
   });
 
   const center = useMemo(() => ({ lat: centerMap[0], lng: centerMap[1] }), [centerMap]);
@@ -37,17 +36,17 @@ const Map = ({ centerMap, markers }) => {
           zoom={13}
         >
           {markers.map((element, i) => {
-            const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = element
+            const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = element;
             let icon;
             if (type === 'bar') {
-              icon = bar
+              icon = bar;
             } else if (type === 'restaurant') {
-              icon = restaurant
+              icon = restaurant;
             } else if (type === 'park') {
-              icon = park
+              icon = park;
             } else if (type === 'cafe') {
-              icon = cafe
-            } else icon = store
+              icon = cafe;
+            } else icon = store;
             return (<Marker icon={icon} key={i} onClick={() => {
               setSelectedElement(true);
               setActiveMarker(i);
@@ -92,7 +91,7 @@ const Map = ({ centerMap, markers }) => {
                 </InfoWindow>
               ) : null}
             </Marker>
-            )
+            );
           })}
 
         </GoogleMap>
@@ -100,4 +99,4 @@ const Map = ({ centerMap, markers }) => {
     </div>
   );
 };
-export default Map
+export default Map;

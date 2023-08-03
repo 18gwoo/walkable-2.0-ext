@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV;
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   mode: NODE_ENV,
@@ -15,11 +16,12 @@ module.exports = {
   },
 
   plugins: [
+    new Dotenv(),
     new HtmlWebpackPlugin({
       template: './index.html',
     }),
     new webpack.DefinePlugin({
-      "REACT_APP_GOOGLE_API_KEY": JSON.stringify(process.env.GOOGLE_API_KEY)
+      'REACT_APP_GOOGLE_API_KEY': JSON.stringify(process.env.GOOGLE_API_KEY)
     })
   ],
 
