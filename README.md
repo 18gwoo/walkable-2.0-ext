@@ -2,7 +2,7 @@
 Walkable is a web application allowing users to easily retrieve a list of establishments within walking distance.
 
 
-#Tech Stack
+# Tech Stack
 Walkable-2.0 utilizes a stack including:
 
 React
@@ -14,7 +14,7 @@ Node.js and Express.js
 SQL Database
 
 
-#Features
+# Features
 Walkable 2.0 currently includes the following features:
 
 Login/SignUp Page
