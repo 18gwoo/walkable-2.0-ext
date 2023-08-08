@@ -1,6 +1,7 @@
 # Walkable-2.0
 Walkable is a web application allowing users to easily retrieve a list of establishments within walking distance.
-Requires a working google api key to utilize
+
+Requires a working google api key to utilize.
 
 
 # Tech Stack
