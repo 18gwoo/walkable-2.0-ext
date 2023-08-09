@@ -1,12 +1,15 @@
 import React from 'react'
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFavoritesActionCreator } from '../actions/actions';
+import WalkIcon from '../assets/walk-icon.svg';
 
-export default function Result({ name, address, distance, walkTime, favorited }) {
+
+
+export default function Result(props) {
 
   const [isFavorited, setIsFavorited] = useState(false);
-
+  const favorites = useSelector((state) => state.favorites.favorites);
   const dispatch = useDispatch();
 
 
@@ -17,25 +20,20 @@ export default function Result({ name, address, distance, walkTime, favorited })
         headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
-            body: JSON.stringify({
-              name,
-              address,
-              distance,
-              walkTime,
-              favorited,
-            })
-          }
+          },
+          body: JSON.stringify(props)
         }
-      const data = fetch('/api/addFavorite', settings);
-      const response = await data.json().data; // new marketList 
-      dispatch(setFavoritesActionCreator(response));
+      const data = await fetch('/api/addFavorite', settings);
+      const response = await data.json(); // new marketList 
+      console.log(response);
+      dispatch(setFavoritesActionCreator(response.data));
         setIsFavorited(true);
     }
     catch (e) {
       console.log(e.message);
     }
   };
-
+  console.log(props.photo_url);
 
   const handleDeleteFavorite = async () => {
     try {
@@ -44,18 +42,14 @@ export default function Result({ name, address, distance, walkTime, favorited })
         headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
-            body: JSON.stringify({
-              name,
-              address,
-              distance,
-              walkTime,
-              favorited,
-            })
-          }
+            
+          },
+        body: JSON.stringify(props)
         }
-      const data = fetch('/api/deleteFavorite', settings);
-      const response = await data.json().data;
-      dispatch(setFavoritesActionCreator(response));
+      const data = await fetch('/api/deleteFavorite', settings);
+      const response = await data.json();
+      console.log(response);
+      dispatch(setFavoritesActionCreator(response.data));
       setIsFavorited(false);
     }
     catch (e) {
@@ -63,13 +57,38 @@ export default function Result({ name, address, distance, walkTime, favorited })
     }
   };
 
+
+  const inStore = (name) => {
+    for (let i = 0; i < favorites.length; i++) {
+        if (favorites[i].name === name) return true;
+    }
+    return false;
+  };
+  // inStore(props.name)
+  // isFavorited
+
+  // name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num
   return (
-    <div>Result
-        <button onClick={isFavorited ? handleAddFavorite : handleDeleteFavorite}>{isFavorited ? 'Added to Favorite' : 'Not Favorited'}</button>
-        {name}
-        {address}
-        {distance}
-        {walkTime}
+    <div className='result-wrapper'>
+      <a href={props.google_url} target= '_blank'>
+        <img src={props.photo_url} className='result-photo'/>
+      </a>
+        <div className='result-title-div'>
+          <p className='result-name'>{props.name}</p>
+          <p className={props.opening_hours === 'true' ? 'result-opening' : 'result-opening closed'}>{props.opening_hours === 'true' ? 'Open' : 'Closed'}</p>
+        </div>
+          <p className='result-address'>{props.address}</p>
+        <div className='result-walking'>
+          <img src={WalkIcon} className='result-walk-icon' />
+          <p style={{marginRight: "8px"}}>{props.distance}</p>•
+          <p style={{marginLeft: "8px"}}>{props.walktime}</p>
+        </div>
+        
+        {/* {props.phone_number !== undefined ? props.phone_number : 'No Phone Number'} */}
+        {/* {props.ratings} */}
+        <div className='results-button'>
+        <button className={inStore(props.name) ? 'btn secondary' : 'btn'} onClick={inStore(props.name) ? handleDeleteFavorite : handleAddFavorite}>{inStore(props.name) ? 'Unfavorite' : 'Add to Favorite'}</button>
+        </div>
     </div>
   )
 }

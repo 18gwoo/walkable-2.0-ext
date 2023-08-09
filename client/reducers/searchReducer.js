@@ -3,18 +3,18 @@ import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
   type: '',
-  location: '',
+  query: '',
   radius: 0,
 };
 
 const searchReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(actions.setSearchActionCreator, (state, action) => {
-      const { type, location, radius } = action.payload;
+      const { type, query, radius } = action.payload;
       return (state = {
         type,
-        location,
-        radius,
+        query,
+        radius: radius,
       });
     })
     .addDefaultCase((state, action) => state);

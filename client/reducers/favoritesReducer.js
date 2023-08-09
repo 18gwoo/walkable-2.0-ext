@@ -2,16 +2,13 @@ import * as actions from '../actions/actions';
 import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
- favoritesList: [],
+ favorites: [],
 };
 
 const favoritesReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(actions.setFavoritesActionCreator, (state, action) => {
-      const { favoritesList } = action.payload;
-      return (state = {
-        favoritesList,
-      });
+      return (state = {favorites: action.payload});
     })
     .addDefaultCase((state, action) => state);
 });

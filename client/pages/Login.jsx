@@ -1,7 +1,10 @@
 import React, {useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUserActionCreator } from '../actions/actions';
+import { setFavoritesActionCreator } from '../actions/actions';
+import bg from '../assets/signup-bg.svg'
+import Logo from '../assets/walkable_logo.svg'
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -21,28 +24,11 @@ export default function Login() {
 
   // use navigate to change route on successful login
   let navigate = useNavigate();
-
-  // fake user data for testing reducer state
-  const fakeUser = {
-    id: 5,
-    firstName: 'Bryan',
-    lastName: 'Trang',
-    email: 'bryan@bryan.com',
-    imgUrl: '',
-    radius: 6,
-    location: 'Los Angeles, CA',
-    loginStatus: true,
-  }
-
   
   // post request for login -> should update userState after 200 repsonse
   const handleLogin = async (e) => {
     // use prevent default here because of form default reload
     e.preventDefault();
-    
-    // test code to make sure state is working and navigate works
-    // dispatch(setUserActionCreator(fakeUser));
-    // navigate('/dashboard');
 
     try {
       const settings = {
@@ -50,35 +36,62 @@ export default function Login() {
         headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
-            body: JSON.stringify({
-              email,
-              password,
-            })
-          }
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          })
         }
-
-        const response = await fetch('/login', settings);
-        if (response.status === 200) {
-          dispatch(setUserActionCreator(fakeUser));
-          navigate('/dashboard');
-        }; 
+        const data = await fetch('/api/login', settings);
+        const response = await data.json();
+        dispatch(setUserActionCreator(response.data));
+        navigate('/dashboard');
     }
     catch (e) {
-      console.log(e.message);
+      console.log(e);
     };
   };
+
+
+  // const onClickLoadFavorites = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const data = await fetch('/api/getAllFavorites');
+  //     const response = await data.json(); 
+  //     console.log(response);
+  //     dispatch(setFavoritesActionCreator(response.data));
+  //   }
+  //   catch (e) {
+  //     console.log('Failed to fetch on render - getFavoritesOnLoad')
+  //     console.log(e.message)
+  //   };
+  // };
+
+  // ; onClickLoadFavorites();
+
   
   return (
-    <div>
-      Login to Walkable
-      <form> 
-        <input type='text' placeholder={'Email Address'} onChange={handleEmail}/>
+    <section className='signup-section'>
+      <div className='signup-wrapper'>
+      <h1>Welcome Back</h1>
+      <h3>Let's get back to walking...</h3>
+      <form onSubmit={handleLogin} className='signup-form'>  
+        <input type='text' placeholder='Email Address' onChange={handleEmail} value={email}/>
         <br></br>
-        <input type='text' placeholder={'Password'} onChange={handlePassword}/>
+        <input type='password' placeholder='Super Secret Password' onChange={handlePassword} value={password}/>
         <br></br>
-        <button onClick={handleLogin}>Login</button>
+        <button className='btn' type='submit'>Login</button>
       </form>
-      <NavLink to="/" ><button>Signup</button></NavLink>
+      <NavLink to="/" ><button className='btn secondary'>Go To Signup</button></NavLink>
     </div>
+    <div className='signup-hero'>
+    <div>
+      <img className='signup-logo' src ={Logo}/>
+    </div>
+    <div className='bg-wrapper'>
+      <img className='signup-bg' src ={bg}/>
+    </div>
+    </div>
+    </section>
     )
 }

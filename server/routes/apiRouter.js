@@ -12,7 +12,8 @@ router.post('/getLocationResults', apiController.addressToLocation, apiControlle
 
 
 router.post('/addFavorite', favoriteController.addFavorite, (req, res) => {
-  res.sendStatus(200);
+  const { data } = res.locals
+  res.status(201).json({data: data})
 });
 
 router.get('/getAllFavorites', favoriteController.getAllFavorites, (req, res) => {
