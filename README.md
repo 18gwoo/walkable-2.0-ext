@@ -2,7 +2,9 @@
 Walkable is a web application allowing users to easily retrieve a list of establishments within walking distance.
 
 # Important
-Requires a working google api key within a .env file in the root directory. Key must be named GOOGLE_API_KEY.
+1. Requires a working google api key within a .env file in the root directory. Key must be named GOOGLE_API_KEY.
+2. Then run "npm install" followed by "npm run dev"
+3. Application will be served on localhost:8080
 
 
 # Tech Stack
