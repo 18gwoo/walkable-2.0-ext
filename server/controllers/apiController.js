@@ -12,7 +12,6 @@ const key = process.env.GOOGLE_API_KEY;
 apiController.addressToLocation = async (req, res, next) => {
   try {
     const { query } = req.body;
-    console.log(key)
     const response = await client.geocode({
       params: {
         address: query,
