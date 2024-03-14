@@ -27,14 +27,14 @@ export default function search() {
   // get search state and deconstructe the search obj
   const dispatch = useDispatch();
   const searchState = useSelector((state) => state.search);
-  const { type, query } = searchState;  
-  console.log(radiusNum, searchType, searchValue)
+  const { type, query, radius } = searchState;  
+  // console.log(radiusNum, searchType, searchValue)
+
 
   const generateSearchResults = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      console.log(searchType)
       const settings = {
         method: 'POST',
         headers: {
@@ -68,7 +68,6 @@ export default function search() {
       console.log('category did not work')
       console.log(e.message);
     };
-    
   };
 
 
@@ -162,4 +161,3 @@ export default function search() {
     </section>
   )
 }
-
