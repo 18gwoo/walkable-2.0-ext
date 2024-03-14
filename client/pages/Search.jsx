@@ -18,26 +18,23 @@ export default function search() {
   const [loading, setLoading] = useState(false);
   const [renderResults, setRenderResults] = useState([]);
   const [searchValue, setSearchValue] = useState('');
-  const [searchType, setSearchType] = useState('restaurant');
+  const [searchType, setSearchType] = useState('');
   const [radiusNum, setRadiusNum] = useState(1);
   const [centerMap, setCenterMap] = useState([])
   const [coordMap, setCoordMap] = useState([])
   const [info, setInfo] = useState([])
   // const []
   // get search state and deconstructe the search obj
-  const searchState = useSelector((state) => state.search);
-  const { type, radius, query } = searchState;
-
-  
   const dispatch = useDispatch();
-
+  const searchState = useSelector((state) => state.search);
+  const { type, query } = searchState;  
+  console.log(radiusNum, searchType, searchValue)
 
   const generateSearchResults = async (e) => {
     e.preventDefault();
     try {
-      dispatch(setSearchActionCreator({searchType, query: searchValue, radiusNum}));
-      const { type, radius, query } = searchState;
       setLoading(true);
+      console.log(searchType)
       const settings = {
         method: 'POST',
         headers: {
@@ -45,15 +42,12 @@ export default function search() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          type: type,
-          radius: radius,
-          query: query,
+          type: searchType,
+          radius: radiusNum * 1600,
+          query: searchValue,
         })
       }
-      console.log(type, radius, query);
-
-      if (type !== '' && radius !== 0 && location !== '') {
-
+      if (searchType !== '' && radiusNum !== 0 && searchValue !== '') {
         const data = await fetch('/api/getLocationResults', settings);
 
         const response = await data.json(); // array of objects
@@ -92,10 +86,12 @@ export default function search() {
 
 
   useEffect(() => {
-    setSearchValue()
-    setSearchType()
-    setRadiusNum()
-  }, []);
+    setSearchValue(query)
+    setSearchType(type)
+  },[]);
+  
+
+
 
   const marks = [
     {
@@ -156,7 +152,7 @@ export default function search() {
               </Box>
               <button className='btn'>Search</button>
             </form>
-              <h2>{type !== '' && query !== '' && radius !== 0 ? `Showing ${type} in ${query} within ${radius / 1600} miles` : 'Start a search to get Walkable results'}</h2>
+              <h2>{searchType !== '' && searchValue !== '' && radiusNum !== 0 ? `Showing ${searchType} in ${searchValue} within ${radiusNum} miles` : 'Start a search to get Walkable results'}</h2>
               {renderResults.length ? <div className='render-wrapper two'> {renderResults} </div> : <div><h3>Search for walkable places</h3> </div>}
         </div>
         <div className='right-div'>
