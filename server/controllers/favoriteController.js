@@ -37,7 +37,7 @@ favoriteController.deleteFavorite = async (req, res, next) => {
     const { name} = req.body;
     const {user_id} = req.cookies;
     const query = {text: `DELETE FROM Favorites WHERE name = $1 AND user_id = $2`, values: [name,user_id]};
-    const deleteResponse = await db.query(query);
+    await db.query(query);
     console.log('Deleted Successfully!');
     const getAllQuery = {text:`SELECT * FROM Favorites WHERE user_id = $1`,values: [user_id]};
     const getAllresponse = await db.query(getAllQuery);
