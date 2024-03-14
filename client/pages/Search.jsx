@@ -28,12 +28,15 @@ export default function search() {
   const searchState = useSelector((state) => state.search);
   const { type, radius, query } = searchState;
 
+  
   const dispatch = useDispatch();
 
-  console.log(type, radius, query);
-  // post request to get results from search
-  const generateCategoryResults = async () => {
+
+  const generateSearchResults = async (e) => {
+    e.preventDefault();
     try {
+      dispatch(setSearchActionCreator({searchType, query: searchValue, radiusNum}));
+      const { type, radius, query } = searchState;
       setLoading(true);
       const settings = {
         method: 'POST',
@@ -47,6 +50,7 @@ export default function search() {
           query: query,
         })
       }
+      console.log(type, radius, query);
 
       if (type !== '' && radius !== 0 && location !== '') {
 
@@ -70,45 +74,7 @@ export default function search() {
       console.log('category did not work')
       console.log(e.message);
     };
-  }
-
-
-  const generateSearchResults = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      dispatch(setSearchActionCreator({ type: searchType, query: searchValue, radius: radiusNum*1600 }));
-      const settings = {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: searchType,
-          radius: radiusNum * 1600, // converting miles to meters
-          query: searchValue,
-        })
-      }
-      const data = await fetch('/api/getLocationResults', settings);
-      const response = await data.json();
-      response.places.sort((a, b) => a.walktime_num - b.walktime_num);
-      const resultsArray = [];
-
-      response.places.forEach((place, i) => {
-        const { name, address, walktime, type, google_url, website_url, photo_url, phone_number, favorited, opening_hours, distance, ratings, walktime_num, coordinates } = place;
-
-        resultsArray.push(<Result key={i} name={name} address={address} walktime={walktime} favorited={favorited} type={type} google_url={google_url} website_url={website_url} photo_url={photo_url} phone_number={phone_number} opening_hours={opening_hours} ratings={ratings} distance={distance} walktime_num={walktime_num}></Result>)
-      });
-      setLoading(false);
-      setCenterMap(response.places[0].center)
-      setInfo(response.places)
-      setRenderResults(resultsArray);
-    }
-    catch (e) {
-      console.log('Not Working');
-      console.log(e.message);
-    }
+    
   };
 
 
@@ -126,7 +92,9 @@ export default function search() {
 
 
   useEffect(() => {
-    generateCategoryResults();
+    setSearchValue()
+    setSearchType()
+    setRadiusNum()
   }, []);
 
   const marks = [

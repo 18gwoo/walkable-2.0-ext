@@ -11,14 +11,13 @@ export default function App() {
 
   return (
     <>
-    {/* <Navbar /> */}
+    <Navbar />
       <Routes>
         <Route path='/' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route element={<Navbar />} >
           <Route path='/search' element={<Search />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          {/* <Route path='/detail' element={<Detail/>}/> */}
         </Route>
 
       </Routes>
