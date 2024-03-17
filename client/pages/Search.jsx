@@ -21,11 +21,9 @@ export default function search() {
   const [searchType, setSearchType] = useState('');
   const [radiusNum, setRadiusNum] = useState(1);
   const [centerMap, setCenterMap] = useState([])
-  const [coordMap, setCoordMap] = useState([])
   const [info, setInfo] = useState([])
   // const []
   // get search state and deconstructe the search obj
-  const dispatch = useDispatch();
   const searchState = useSelector((state) => state.search);
   const { type, query, radius } = searchState;  
   // console.log(radiusNum, searchType, searchValue)
