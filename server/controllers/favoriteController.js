@@ -53,6 +53,7 @@ favoriteController.deleteFavorite = async (req, res, next) => {
   }
 }
 // get all places from favorites db
+//this needs to be used in other areas as well
 favoriteController.getAllFavorites = async (req, res, next) => {
     try {
     const {user_id} = req.cookies;
