@@ -11,17 +11,25 @@ router.post('/getLocationResults', apiController.addressToLocation, apiControlle
 })
 
 
-router.post('/addFavorite', favoriteController.addFavorite, (req, res) => {
+router.post('/addFavorite', 
+favoriteController.addFavorite,
+favoriteController.getAllFavorites,
+(req, res) => {
   const { data } = res.locals
   res.status(201).json({data: data})
 });
 
-router.get('/getAllFavorites', favoriteController.getAllFavorites, (req, res) => {
+router.get('/getAllFavorites', 
+favoriteController.getAllFavorites,
+(req, res) => {
   const { data } = res.locals;
   res.status(200).json({ data: data });
 });
 
-router.delete('/deleteFavorite', favoriteController.deleteFavorite, (req, res) => {
+router.delete('/deleteFavorite', 
+favoriteController.deleteFavorite, 
+favoriteController.getAllFavorites,
+(req, res) => {
   const { data } = res.locals;
   res.status(200).json({ data: data });
 });

@@ -16,11 +16,11 @@ favoriteController.addFavorite = async (req, res, next) => {
     const query = {text: `INSERT INTO Favorites (name,address,photo_url,google_url,website_url,phone_number,opening_hours,ratings,distance,type,walktime,walktime_num,created_at,user_id,favorited)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14,$15) RETURNING *`, values: [name,address,photo_url,google_url, website_url,phone_number,opening_hours,ratings,distance,type,walktime,walktime_num,created_at,user_id, favorited]}
     const response = await db.query(query);
-    const getAllQuery = {text:`SELECT * FROM Favorites WHERE user_id = $1`,values: [user_id]};
-    const getAllresponse = await db.query(getAllQuery);
-    const arrOfObjs = getAllresponse.rows;
-    res.locals.data = arrOfObjs;
-    console.log('Successfully Inserted!');
+    // const getAllQuery = {text:`SELECT * FROM Favorites WHERE user_id = $1`,values: [user_id]};
+    // const getAllresponse = await db.query(getAllQuery);
+    // const arrOfObjs = getAllresponse.rows;
+    // res.locals.data = arrOfObjs;
+    // console.log('Successfully Inserted!');
    next();
   } catch (e) {
     next({
@@ -39,10 +39,10 @@ favoriteController.deleteFavorite = async (req, res, next) => {
     const query = {text: `DELETE FROM Favorites WHERE name = $1 AND user_id = $2`, values: [name,user_id]};
     await db.query(query);
     console.log('Deleted Successfully!');
-    const getAllQuery = {text:`SELECT * FROM Favorites WHERE user_id = $1`,values: [user_id]};
-    const getAllresponse = await db.query(getAllQuery);
-    const arrOfObjs = getAllresponse.rows;
-    res.locals.data = arrOfObjs;
+    // const getAllQuery = {text:`SELECT * FROM Favorites WHERE user_id = $1`,values: [user_id]};
+    // const getAllresponse = await db.query(getAllQuery);
+    // const arrOfObjs = getAllresponse.rows;
+    // res.locals.data = arrOfObjs;
     next();
   } catch (e) {
     next({
