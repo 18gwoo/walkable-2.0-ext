@@ -1,3 +1,6 @@
+// Search page
+//   where the app searches for restaurant
+
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -22,7 +25,7 @@ export default function search() {
   const [radiusNum, setRadiusNum] = useState(1);
   const [centerMap, setCenterMap] = useState([])
   const [info, setInfo] = useState([])
-  // const []
+
   // get search state and deconstructe the search obj
   const searchState = useSelector((state) => state.search);
   const { type, query, radius } = searchState;  

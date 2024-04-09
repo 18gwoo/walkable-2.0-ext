@@ -1,3 +1,6 @@
+//Dashboard which shows the favorites and the categorycontainer
+
+
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import FavoritesContainer from '../components/favoritesContainer'

@@ -1,3 +1,5 @@
+//Google map that shows where the nearest results are
+
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, InfoWindow, Marker, useLoadScript } from '@react-google-maps/api';
 import { useMemo } from 'react';

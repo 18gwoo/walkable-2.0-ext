@@ -1,3 +1,5 @@
+//The different categories that are represented on the landing page
+
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';

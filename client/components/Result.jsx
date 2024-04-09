@@ -1,3 +1,6 @@
+//Each result is created here.
+//This is where information is shown as well as where the logic/button for favoriting/unfavoriting results lies as well
+
 import React from 'react'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

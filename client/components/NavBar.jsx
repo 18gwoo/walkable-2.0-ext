@@ -1,3 +1,5 @@
+//Navbar component
+
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import Logo from '../assets/walkable_logo.svg'
