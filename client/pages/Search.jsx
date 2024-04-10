@@ -34,6 +34,7 @@ export default function search() {
 
   const generateSearchResults = async (e) => {
     e.preventDefault();
+    console.log(searchType, searchValue, radiusNum)
     try {
       setLoading(true);
       const settings = {
@@ -121,6 +122,7 @@ export default function search() {
       <div className='search-wrapper'>
         <div className='left-div'>
             <form onSubmit={generateSearchResults}>
+              {/* PROBLEM LIES HERE SOMEWHERE OR WITH STATE. WHEN THE SEARCH FIELD IS FILLED OUT, THE CODE WORKS AS INTENDED. OTHERWISE IT DOES NOT WORK */}
               <input className='search-field' type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
               <Box sx={{marginTop: "16px", marginBottom: "16px"}}>
                 <FormControl fullWidth>
