@@ -122,7 +122,7 @@ export default function search() {
       <div className='search-wrapper'>
         <div className='left-div'>
             <form onSubmit={generateSearchResults}>
-              {/* PROBLEM LIES HERE SOMEWHERE OR WITH STATE. WHEN THE SEARCH FIELD IS FILLED OUT, THE CODE WORKS AS INTENDED. OTHERWISE IT DOES NOT WORK */}
+              {/* PROBLEM LIES HERE SOMEWHERE OR WITH STATE. WHEN THE SEARCH FIELD IS FILLED OUT, THE CODE WORKS AS INTENDED. OTHERWISE IT DOES NOT WORK. Unsure still if its an issue pertaining to the value itself or what the input actually does. */}
               <input className='search-field' type="text" onChange={handleSearchField} placeholder="Search in a different location" value={searchValue} />
               <Box sx={{marginTop: "16px", marginBottom: "16px"}}>
                 <FormControl fullWidth>
