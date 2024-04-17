@@ -34,7 +34,7 @@ export default function search() {
 
   const generateSearchResults = async (e) => {
     e.preventDefault();
-    console.log(searchType, searchValue, radiusNum)
+    console.log(searchType, searchValue, radiusNum) //searchValue is used here
     try {
       setLoading(true);
       const settings = {
@@ -74,7 +74,7 @@ export default function search() {
 
 
   const handleSearchField = (e) => {
-    setSearchValue(e.target.value);
+    setSearchValue(e.target.value); //search value is set here
   };
 
   const handleTypeDropdown = (e) => {
@@ -87,7 +87,7 @@ export default function search() {
 
 
   useEffect(() => {
-    setSearchValue(query)
+    setSearchValue(query) //query might not be anything
     setSearchType(type)
   },[]);
   
