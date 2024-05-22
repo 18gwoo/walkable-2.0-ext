@@ -78,11 +78,11 @@ export default function search() {
   };
 
   const handleTypeDropdown = (e) => {
-    setSearchType(e.target.value);
+    setSearchType(e.target.value); //Type is set here
   }
 
   const handleRadiusSlider = (e) => {
-    setRadiusNum(e.target.value);
+    setRadiusNum(e.target.value); //Radius is set here
   };
 
 
